@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "./schema";
+import prisma from "@/prisma/client";
 
-// even though 'request' arg is not use.
-// But,We put it to prevent Next.js server cache the data
-export function GET(request: NextRequest) {
-  return NextResponse.json([
-    {id: 1, name: 'Mos'},
-    {id: 2, name: 'Prach'},
-  ])
+export async function GET(request: NextRequest) {
+  // prisma.user => access to our model User
+  const users = await prisma.user.findMany()
+
+  return NextResponse.json(users)
 }
 
 export async function POST(request: NextRequest) {
@@ -17,5 +16,18 @@ export async function POST(request: NextRequest) {
   if (!validation.success)
     return NextResponse.json({ error: validation.error.errors}, {status: 400});
 
-  return NextResponse.json({id: 1, name: body.name}, {status: 201})
+  const user = await prisma.user.findUnique({ // Check unique email in database
+    where: {email: body.email}
+  })
+  if (user)
+    return NextResponse.json({error: 'email has been used.'}, {status: 400})
+
+  const newUser = await prisma.user.create({
+    data: {
+      name: body.name,
+      email: body.email
+    }
+  });
+
+  return NextResponse.json(newUser, {status: 201})
 }
