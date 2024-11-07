@@ -2,14 +2,14 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import schema from "./schema";
 
-export async function GET(requset: NextRequest) {
+export async function GET(_: NextRequest) {
   const products = await prisma.product.findMany()
 
   return NextResponse.json(products)
 }
 
-export async function POST(requset: NextRequest) {
-  const body = await requset.json()
+export async function POST(request: NextRequest) {
+  const body = await request.json()
 
   const validation = schema.safeParse(body)
   if (!validation.success)

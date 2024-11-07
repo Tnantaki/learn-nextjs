@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        doto: 'var(--font-doto)'
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

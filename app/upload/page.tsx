@@ -1,6 +1,5 @@
 'use client'
-import React from 'react'
-import { CldUploadWidget, CldImage } from 'next-cloudinary'
+import { CldUploadWidget } from 'next-cloudinary';
 
 const UploadPage = () => {
   return (
